@@ -35,13 +35,13 @@ brew install pandoc typst
 ## Install
 
 ```bash
-pip install git+https://github.com/<your-user>/mdocs.git
+pip install git+https://github.com/yobryon/mdocs.git
 ```
 
 To also get `--watch` mode (auto-recompile on file changes):
 
 ```bash
-pip install "mdocs[watch] @ git+https://github.com/<your-user>/mdocs.git"
+pip install "mdocs[watch] @ git+https://github.com/yobryon/mdocs.git"
 ```
 
 ## Usage
