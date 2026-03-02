@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mdocs"
+version = "0.1.0"
+description = "Recursively compile Markdown documents to PDF via pandoc + typst"
+requires-python = ">=3.10"
+readme = "README.md"
+license = "MIT"
+dependencies = ["click>=8.0"]
+
+[project.optional-dependencies]
+dev = ["pytest>=7.0", "ruff>=0.4"]
+watch = ["watchdog>=3.0"]
+
+[project.scripts]
+mdocs = "mdocs.cli:main"
+
+[tool.ruff]
+target-version = "py310"
+line-length = 99
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "W"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
