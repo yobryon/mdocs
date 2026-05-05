@@ -36,7 +36,14 @@ def build_file(src: Path, input_dir: Path, output_dir: Path) -> BuildResult:
     t0 = time.monotonic()
     try:
         subprocess.run(
-            ["pandoc", str(src), "--pdf-engine=typst", "-o", str(dest)],
+            [
+                "pandoc",
+                str(src),
+                "--from=markdown+lists_without_preceding_blankline",
+                "--pdf-engine=typst",
+                "-o",
+                str(dest),
+            ],
             check=True,
             capture_output=True,
             text=True,

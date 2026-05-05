@@ -6,17 +6,26 @@ Built for the workflow of: write a bunch of markdown, then PDF the whole lot to 
 
 ## Prerequisites
 
-You need **pandoc** and **typst** on your PATH.
+You need **pandoc** (3.8 or newer) and **typst** on your PATH.
+
+> **Note:** Older pandoc versions (e.g. 3.7 from `apt` on Debian/Ubuntu) have a buggy typst integration that fails with `error: font fallback list must not be empty` even when system fonts are properly installed. Use 3.8+.
 
 ### Linux (Debian/Ubuntu)
 
 ```bash
-sudo apt install pandoc
+# pandoc — apt's version may be too old. Grab the latest .deb:
+# https://github.com/jgm/pandoc/releases
+# Example:
+wget https://github.com/jgm/pandoc/releases/download/3.9/pandoc-3.9-1-amd64.deb
+sudo dpkg -i pandoc-3.9-1-amd64.deb
 
 # typst — download the latest release binary:
 # https://github.com/typst/typst/releases
 # or via cargo:
 cargo install typst-cli
+
+# fonts — minimal installs may have none; install at least one font family:
+sudo apt install fonts-dejavu
 ```
 
 ### Windows
