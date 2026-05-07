@@ -6,6 +6,7 @@ from pathlib import Path
 
 import click
 
+from mdocs import __version__
 from mdocs.compiler import clean_output, compile_all
 
 
@@ -15,6 +16,7 @@ def _check_tool(name: str) -> None:
 
 
 @click.command()
+@click.version_option(__version__, "-V", "--version", prog_name="mdocs")
 @click.argument("input_dir", type=click.Path(exists=True, file_okay=False, path_type=Path))
 @click.argument("output_dir", type=click.Path(path_type=Path), required=False, default=None)
 @click.option("-v", "--verbose", is_flag=True, help="Print each file as it's processed.")
