@@ -7,6 +7,8 @@ from concurrent.futures import ProcessPoolExecutor, as_completed
 from dataclasses import dataclass
 from pathlib import Path
 
+_TYPST_HEADER = Path(__file__).parent / "templates" / "breakable.typ"
+
 
 @dataclass
 class BuildResult:
@@ -41,6 +43,7 @@ def build_file(src: Path, input_dir: Path, output_dir: Path) -> BuildResult:
                 str(src),
                 "--from=markdown+lists_without_preceding_blankline",
                 "--pdf-engine=typst",
+                f"--include-in-header={_TYPST_HEADER}",
                 "-o",
                 str(dest),
             ],

@@ -90,6 +90,11 @@ mdocs ./docs -j 2
 mdocs ./docs -w
 ```
 
+### Behavior notes
+
+- **Lists without preceding blank lines** are recognized as lists (pandoc's `lists_without_preceding_blankline` extension is enabled by default).
+- **Long tables span pages.** mdocs ships a small typst header that makes table figures breakable — long markdown tables paginate naturally instead of overflowing.
+
 The output directory mirrors the input directory structure:
 
 ```

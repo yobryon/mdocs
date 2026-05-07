@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mdocs"
-version = "0.2.0"
+version = "0.3.0"
 description = "Recursively compile Markdown documents to PDF via pandoc + typst"
 requires-python = ">=3.10"
 readme = "README.md"
@@ -17,6 +17,9 @@ watch = ["watchdog>=3.0"]
 
 [project.scripts]
 mdocs = "mdocs.cli:main"
+
+[tool.setuptools.package-data]
+mdocs = ["templates/*.typ"]
 
 [tool.ruff]
 target-version = "py310"
