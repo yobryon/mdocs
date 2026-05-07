@@ -10,6 +10,8 @@ You need **pandoc** (3.8 or newer) and **typst** on your PATH.
 
 > **Note:** Older pandoc versions (e.g. 3.7 from `apt` on Debian/Ubuntu) have a buggy typst integration that fails with `error: font fallback list must not be empty` even when system fonts are properly installed. Use 3.8+.
 
+You also need at least one system font installed — typst won't render without one. Windows and macOS ship with plenty; minimal Linux installs (servers, slim WSL, lean Docker images) often don't, in which case install something like `fonts-dejavu`, `fonts-liberation`, or `fonts-noto` and run `fc-cache -fv`.
+
 ### Linux (Debian/Ubuntu)
 
 ```bash
@@ -43,13 +45,23 @@ brew install pandoc typst
 
 ## Install
 
+Recommended — install as an isolated CLI tool with [uv](https://docs.astral.sh/uv/):
+
+```bash
+uv tool install git+https://github.com/yobryon/mdocs.git
+```
+
+Or with plain pip (into your active environment):
+
 ```bash
 pip install git+https://github.com/yobryon/mdocs.git
 ```
 
-To also get `--watch` mode (auto-recompile on file changes):
+To also get `--watch` mode (auto-recompile on file changes), include the `watch` extra:
 
 ```bash
+uv tool install "git+https://github.com/yobryon/mdocs.git" --with watchdog
+# or
 pip install "mdocs[watch] @ git+https://github.com/yobryon/mdocs.git"
 ```
 
