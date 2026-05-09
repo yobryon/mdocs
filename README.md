@@ -72,7 +72,18 @@ pip install "mdocs[watch] @ git+https://github.com/yobryon/mdocs.git"
 mdocs ./docs
 
 # Specify an output directory
-mdocs ./docs ./pdfs
+mdocs ./docs -o ./pdfs
+
+# Multiple inputs (dirs and/or .md files); -o is required when mixing.
+mdocs docs/design docs/specs docs/README.md -o ./pdfs
+
+# Bash brace expansion works — the shell expands these into separate args:
+mdocs docs/{design,specs}/*.md -o ./pdfs
+
+# Exclude subtrees (patterns are relative to each input directory).
+# Repeatable, or use brace expansion to fan out:
+mdocs docs -o tmp/docs -x 'reference/**' -x '**/archive/**'
+mdocs docs -o tmp/docs --exclude={crossover,reference,sprint}/**
 
 # See what would be compiled without running pandoc
 mdocs ./docs --dry-run
@@ -86,7 +97,7 @@ mdocs ./docs --clean
 # Limit parallel workers (default: CPU count)
 mdocs ./docs -j 2
 
-# Watch for changes and recompile automatically
+# Watch for changes and recompile automatically (single dir input only)
 mdocs ./docs -w
 ```
 
