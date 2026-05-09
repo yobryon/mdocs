@@ -80,10 +80,11 @@ mdocs docs/design docs/specs docs/README.md -o ./pdfs
 # Bash brace expansion works — the shell expands these into separate args:
 mdocs docs/{design,specs}/*.md -o ./pdfs
 
-# Exclude subtrees (patterns are relative to each input directory).
+# Exclude subtrees. Patterns match either the input-relative path
+# (`reference/**`) or the path as you'd type it (`docs/reference/**`).
 # Repeatable, or use brace expansion to fan out:
 mdocs docs -o tmp/docs -x 'reference/**' -x '**/archive/**'
-mdocs docs -o tmp/docs --exclude={crossover,reference,sprint}/**
+mdocs docs -o tmp/docs --exclude=docs/{crossover,reference,sprint}/**
 
 # See what would be compiled without running pandoc
 mdocs ./docs --dry-run

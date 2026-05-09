@@ -6,7 +6,7 @@ import subprocess
 import time
 from concurrent.futures import ProcessPoolExecutor, as_completed
 from dataclasses import dataclass
-from pathlib import Path, PurePath
+from pathlib import Path
 
 _TYPST_HEADER = Path(__file__).parent / "templates" / "breakable.typ"
 
@@ -20,19 +20,28 @@ class BuildResult:
     error: str = ""
 
 
-def _matches_any(rel: PurePath, patterns: list[str]) -> bool:
-    rel_posix = rel.as_posix()
-    for pat in patterns:
-        if rel.match(pat):
-            return True
-        # PurePath.match doesn't traverse `**` across multiple segments the way
-        # most users expect; fall back to fnmatch on the posix string for those.
-        if "**" in pat:
-            from fnmatch import fnmatch
+def _matches_any(candidates: list[str], patterns: list[str]) -> bool:
+    """True if any candidate path string matches any pattern.
 
-            # Translate `**` into fnmatch's `*` (which already matches across /).
-            if fnmatch(rel_posix, pat.replace("**", "*")):
+    Candidates typically include both the input-relative path (`reference/foo.md`)
+    and the path as the user typed it on the command line (`docs/reference/foo.md`),
+    so either pattern style works.
+    """
+    from fnmatch import fnmatch
+
+    for pat in patterns:
+        # Translate `**` into fnmatch's `*` (which already matches across /).
+        translated = pat.replace("**", "*")
+        for cand in candidates:
+            if fnmatch(cand, translated):
                 return True
+            # Also match against any tail of the path so a pattern like
+            # `reference/**` matches even when the candidate is the full
+            # `docs/reference/foo.md` form.
+            parts = cand.split("/")
+            for i in range(1, len(parts)):
+                if fnmatch("/".join(parts[i:]), translated):
+                    return True
     return False
 
 
@@ -49,8 +58,9 @@ def discover(inputs: list[Path], excludes: list[str] | None = None) -> list[Path
     for entry in inputs:
         if entry.is_dir():
             for md in entry.rglob("*.md"):
-                rel = md.relative_to(entry)
-                if _matches_any(rel, excludes):
+                rel = md.relative_to(entry).as_posix()
+                as_typed = md.as_posix()
+                if _matches_any([rel, as_typed], excludes):
                     continue
                 resolved = md.resolve()
                 if resolved in seen:

@@ -54,6 +54,19 @@ def test_discover_excludes(tmp_path):
     assert "readme.md" in names
 
 
+def test_discover_excludes_cwd_style(tmp_path, monkeypatch):
+    """Patterns like `docs/reference/**` (the form users actually type) should match."""
+    root = _make_tree(tmp_path)
+    (root / "reference").mkdir()
+    (root / "reference" / "huge.md").write_text("# huge")
+
+    monkeypatch.chdir(tmp_path)
+    found = discover([Path("docs")], excludes=["docs/reference/**"])
+    names = [p.name for p in found]
+    assert "huge.md" not in names
+    assert "readme.md" in names
+
+
 def test_discover_multiple_inputs_dedupes(tmp_path):
     root = _make_tree(tmp_path)
     explicit = root / "readme.md"
