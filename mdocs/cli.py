@@ -32,7 +32,7 @@ def _check_tool(name: str) -> None:
     "excludes",
     multiple=True,
     metavar="PATTERN",
-    help="Glob to exclude. Matches either the input-relative path or the as-typed path. Repeatable.",
+    help="Glob to exclude. Matches input-relative or as-typed path. Repeatable.",
 )
 @click.option("-v", "--verbose", is_flag=True, help="Print each file as it's processed.")
 @click.option("--clean", is_flag=True, help="Remove output directory before building.")

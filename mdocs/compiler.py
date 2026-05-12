@@ -97,6 +97,13 @@ def build_file(src: Path, root: Path, output_dir: Path) -> BuildResult:
     dest = output_path_for(src, root, output_dir)
     dest.parent.mkdir(parents=True, exist_ok=True)
 
+    # Resolve referenced resources (images, etc.) from the md file's directory
+    # first, then fall back to the input root for shared assets/.
+    resource_dirs = [str(src.parent)]
+    if src.parent != root:
+        resource_dirs.append(str(root))
+    resource_path = os.pathsep.join(resource_dirs)
+
     t0 = time.monotonic()
     try:
         subprocess.run(
@@ -105,6 +112,7 @@ def build_file(src: Path, root: Path, output_dir: Path) -> BuildResult:
                 str(src),
                 "--from=markdown+lists_without_preceding_blankline",
                 "--pdf-engine=typst",
+                f"--resource-path={resource_path}",
                 f"--include-in-header={_TYPST_HEADER}",
                 "-o",
                 str(dest),
